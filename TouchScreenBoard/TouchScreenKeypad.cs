@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Reflection.Emit;
 
 namespace TouchScreenBoard
 {
@@ -78,6 +79,9 @@ namespace TouchScreenBoard
         public static RoutedUICommand CmdDot = new RoutedUICommand();
         public static RoutedUICommand CmdBackspace = new RoutedUICommand();
 
+        //berk
+        public static RoutedUICommand CmdScroll = new RoutedUICommand();
+
 
         public static RoutedUICommand CmdEnter = new RoutedUICommand();
 
@@ -85,11 +89,12 @@ namespace TouchScreenBoard
         public static RoutedUICommand CmdClose = new RoutedUICommand();
 
 
-
+        static bool moved = false;
         public TouchScreenKeypad()
         {
             Width = WidthTouchKeyboard;
             Height = HeightTouchKeyboard;
+            moved = false;
         }
 
         static TouchScreenKeypad()
@@ -114,6 +119,8 @@ namespace TouchScreenBoard
             CommandBinding Cb0 = new CommandBinding(Cmd0, RunCommand);
             CommandBinding CbDot = new CommandBinding(CmdDot, RunCommand);
             CommandBinding CbBackspace = new CommandBinding(CmdBackspace, RunCommand);
+            //berk
+            CommandBinding CbScroll = new CommandBinding(CmdScroll, RunCommand);
 
 
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), Cb1);
@@ -128,6 +135,8 @@ namespace TouchScreenBoard
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), Cb0);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), CbDot);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), CbBackspace);
+            //berk
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), CbScroll);
 
 
             CommandBinding CbEnter = new CommandBinding(CmdEnter, RunCommand);
@@ -153,36 +162,36 @@ namespace TouchScreenBoard
             }
             else if (e.Command == Cmd3)
             {
-                    TouchScreenKeypad.TouchScreenText += "3";
+                TouchScreenKeypad.TouchScreenText += "3";
 
             }
             else if (e.Command == Cmd4)
             {
-                    TouchScreenKeypad.TouchScreenText += "4";
+                TouchScreenKeypad.TouchScreenText += "4";
             }
             else if (e.Command == Cmd5)
             {
-                    TouchScreenKeypad.TouchScreenText += "5";
+                TouchScreenKeypad.TouchScreenText += "5";
             }
             else if (e.Command == Cmd6)
             {
-                    TouchScreenKeypad.TouchScreenText += "6";
+                TouchScreenKeypad.TouchScreenText += "6";
             }
             else if (e.Command == Cmd7)
             {
-                    TouchScreenKeypad.TouchScreenText += "7";
+                TouchScreenKeypad.TouchScreenText += "7";
             }
             else if (e.Command == Cmd8)
             {
-                    TouchScreenKeypad.TouchScreenText += "8";
+                TouchScreenKeypad.TouchScreenText += "8";
             }
             else if (e.Command == Cmd9)
             {
-                    TouchScreenKeypad.TouchScreenText += "9";
+                TouchScreenKeypad.TouchScreenText += "9";
             }
             else if (e.Command == Cmd0)
             {
-                    TouchScreenKeypad.TouchScreenText += "0";
+                TouchScreenKeypad.TouchScreenText += "0";
             }
             else if (e.Command == CmdDot)
             {
@@ -200,6 +209,10 @@ namespace TouchScreenBoard
             {
                 if (_InstanceObject != null)
                 {
+                    if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
+                    {
+                        TouchScreenText = "0";
+                    }
                     _InstanceObject.Close();
                     _InstanceObject = null;
                 }
@@ -213,7 +226,32 @@ namespace TouchScreenBoard
             }
             else if (e.Command == CmdClose)
             {
+                if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
+                {
+                    TouchScreenText = "0";
+                }
                 OnLostFocus(_CurrentControl, null);
+            }
+            else if (e.Command == CmdScroll)
+            {
+                if (!TouchScreenKeypad.TouchScreenText.Equals(""))
+                {
+                    string firstCharacter = TouchScreenKeypad.TouchScreenText.Substring(0, 1);
+                    if (!firstCharacter.Equals("-"))
+                    {
+                        TouchScreenKeypad.TouchScreenText = "-" + TouchScreenKeypad.TouchScreenText;
+                    }
+                    else
+                    {
+                        TouchScreenKeypad.TouchScreenText = TouchScreenKeypad.TouchScreenText.Replace("-", "");
+                    }
+                }
+                else
+                {
+                    TouchScreenKeypad.TouchScreenText = "-" + TouchScreenKeypad.TouchScreenText;
+                }
+
+
             }
         }
         #endregion
@@ -221,37 +259,51 @@ namespace TouchScreenBoard
 
         private static void syncchild()
         {
-            if (_CurrentControl != null && _InstanceObject != null)
+            try
             {
+                if (_CurrentControl != null && _InstanceObject != null)
+                {
 
-                Point virtualpoint = new Point(0, _CurrentControl.ActualHeight + 3);
-                Point Actualpoint = _CurrentControl.PointToScreen(virtualpoint);
+                    Point virtualpoint = new Point(0, _CurrentControl.ActualHeight + 3);
+                    Point Actualpoint = _CurrentControl.PointToScreen(virtualpoint);
 
-                if (WidthTouchKeyboard + Actualpoint.X > SystemParameters.VirtualScreenWidth)
-                {
-                    double difference = WidthTouchKeyboard + Actualpoint.X - SystemParameters.VirtualScreenWidth;
-                    _InstanceObject.Left = Actualpoint.X - difference;
-                }
-                else if (!(Actualpoint.X > 1))
-                {
-                    _InstanceObject.Left = 1;
-                }
-                else
-                {
-                    _InstanceObject.Left = Actualpoint.X;
-                }
+                    if (WidthTouchKeyboard + Actualpoint.X > SystemParameters.VirtualScreenWidth)
+                    {
+                        double difference = WidthTouchKeyboard + Actualpoint.X - SystemParameters.VirtualScreenWidth;
+                        _InstanceObject.Left = Actualpoint.X - difference;
+                    }
+                    else if (!(Actualpoint.X > 1))
+                    {
+                        _InstanceObject.Left = 1;
+                    }
+                    else
+                    {
+                        _InstanceObject.Left = Actualpoint.X;
+                    }
 
-                if(HeightTouchKeyboard + Actualpoint.Y > SystemParameters.VirtualScreenHeight)
-                {
-                    _InstanceObject.Top = _CurrentControl.PointToScreen(new Point(0, 0)).Y - HeightTouchKeyboard - 3;
-                }
-                else
-                {
-                    _InstanceObject.Top = Actualpoint.Y;
-                }
+                    if (HeightTouchKeyboard + Actualpoint.Y > SystemParameters.VirtualScreenHeight)
+                    {
+                        _InstanceObject.Top = _CurrentControl.PointToScreen(new Point(0, 0)).Y - HeightTouchKeyboard - 3;
+                    }
+                    else
+                    {
+                        _InstanceObject.Top = Actualpoint.Y;
+                    }
 
-                _InstanceObject.Show();
+                    _InstanceObject.Show();
+                    var abc = (TextBox)_CurrentControl;
+                    if (abc.Text == "0")
+                    {
+                        abc.Text = "";
+                    }
+                }
             }
+            catch (Exception)
+            {
+                _InstanceObject.Close();
+                //throw;
+            }
+
 
 
         }
@@ -312,7 +364,7 @@ namespace TouchScreenBoard
                     ct = (FrameworkElement)ct.Parent;
                 }
 
-                if(ct == null)
+                if (ct == null)
                 {
                     host.GotFocus += new RoutedEventHandler(TouchScreenKeypad_Activated);
                     host.LostFocus += new RoutedEventHandler(TouchScreenKeypad_Deactivated);
@@ -340,7 +392,7 @@ namespace TouchScreenBoard
         }
         static void TouchScreenKeypad_Deactivated(object sender, RoutedEventArgs e)
         {
-            if(_InstanceObject != null)
+            if (_InstanceObject != null)
             {
                 _InstanceObject.Topmost = false;
             }
@@ -356,7 +408,7 @@ namespace TouchScreenBoard
 
         static void TouchScreenKeypad_Activated(object sender, RoutedEventArgs e)
         {
-            if(_InstanceObject != null)
+            if (_InstanceObject != null)
             {
                 _InstanceObject.Topmost = true;
             }
@@ -370,7 +422,8 @@ namespace TouchScreenBoard
 
         static void tb_LayoutUpdated(object sender, EventArgs e)
         {
-            syncchild();
+            if (!moved)
+                syncchild();
         }
 
         static void OnLostFocus(object sender, RoutedEventArgs e)
@@ -383,10 +436,78 @@ namespace TouchScreenBoard
 
             if (_InstanceObject != null)
             {
+                if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
+                {
+                    TouchScreenText = "0";
+                }
+
                 _InstanceObject.Close();
                 _InstanceObject = null;
             }
         }
+        #endregion
+        #region Drag Window
+        public static readonly DependencyProperty EnableDragProperty = DependencyProperty.RegisterAttached(
+            "EnableDragPad",
+            typeof(bool),
+            typeof(EnableDragHelper),
+            new PropertyMetadata(default(bool), OnLoaded));
+
+        private static void OnLoaded(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var uiElement = dependencyObject as UIElement;
+            if (uiElement == null || (dependencyPropertyChangedEventArgs.NewValue is bool) == false)
+            {
+                return;
+            }
+            if ((bool)dependencyPropertyChangedEventArgs.NewValue == true)
+            {
+                uiElement.MouseMove += UIElementOnMouseMove;
+            }
+            else
+            {
+                uiElement.MouseMove -= UIElementOnMouseMove;
+            }
+
+        }
+
+        private static void UIElementOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
+        {
+            var uiElement = sender as UIElement;
+            if (uiElement != null)
+            {
+                if (mouseEventArgs.LeftButton == MouseButtonState.Pressed)
+                {
+                    DependencyObject parent = uiElement;
+                    int avoidInfiniteLoop = 0;
+                    // Search up the visual tree to find the first parent window.
+                    while ((parent is Window) == false)
+                    {
+                        parent = VisualTreeHelper.GetParent(parent);
+                        avoidInfiniteLoop++;
+                        if (avoidInfiniteLoop == 1000)
+                        {
+                            // Something is wrong - we could not find the parent window.
+                            return;
+                        }
+                    }
+                    var window = parent as Window;
+                    window.DragMove();
+                }
+            }
+        }
+
+        public static void SetEnableDrag(DependencyObject element, bool value)
+        {
+            moved = true;
+            element.SetValue(EnableDragProperty, value);
+        }
+
+        public static bool GetEnableDrag(DependencyObject element)
+        {
+            return (bool)element.GetValue(EnableDragProperty);
+        }
+        #endregion
     }
 }
-#endregion
+

@@ -3,15 +3,17 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TouchScreenBoard
 {
     public class TouchScreenKeyboard : Window
     {
         #region Property & Variable & Constructor
-        private static double _WidthTouchKeyboard = 830;
+        private static double _WidthTouchKeyboard = 935;
 
-        private static double _heightTouchKeyboard = 290;
+        private static double _heightTouchKeyboard = 340;
 
         public static double HeightTouchKeyboard
         {
@@ -136,6 +138,7 @@ namespace TouchScreenBoard
         public static RoutedUICommand CmdGreaterThan = new RoutedUICommand();
         public static RoutedUICommand CmdLessThan = new RoutedUICommand();
         public static RoutedUICommand CmdQuestion = new RoutedUICommand();
+        public static RoutedUICommand move = new RoutedUICommand();
 
 
 
@@ -143,14 +146,41 @@ namespace TouchScreenBoard
         public static RoutedUICommand CmdClear = new RoutedUICommand();
         public static RoutedUICommand CmdClose = new RoutedUICommand();
 
+        //berk türkçe
+        public static RoutedUICommand CmdGg = new RoutedUICommand();
+        public static RoutedUICommand CmdUu = new RoutedUICommand();
+        public static RoutedUICommand CmdSs = new RoutedUICommand();
+        public static RoutedUICommand CmdIi = new RoutedUICommand();
+        public static RoutedUICommand CmdOo = new RoutedUICommand();
+        public static RoutedUICommand CmdCc = new RoutedUICommand();
+        //berk
 
-
+        Image topBar;
         public TouchScreenKeyboard()
         {
             this.Width = WidthTouchKeyboard;
             this.Height = HeightTouchKeyboard;
-        }
+            moved = false;
+            foreach (Image br in FindVisualChildren<Image>(this))
+            {
+                if (br.Name == "topBar")
+                {
+                    this.topBar = br;
+                }
 
+            }
+        }
+        public static IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj == null) yield return (T)Enumerable.Empty<T>();
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+            {
+                DependencyObject ithChild = VisualTreeHelper.GetChild(depObj, i);
+                if (ithChild == null) continue;
+                if (ithChild is T t) yield return t;
+                foreach (T childOfChild in FindVisualChildren<T>(ithChild)) yield return childOfChild;
+            }
+        }
         static TouchScreenKeyboard()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(TouchScreenKeyboard), new FrameworkPropertyMetadata(typeof(TouchScreenKeyboard)));
@@ -232,6 +262,7 @@ namespace TouchScreenBoard
             CommandBinding CbGreaterThan = new CommandBinding(CmdGreaterThan, RunCommand);
             CommandBinding CbLessThan = new CommandBinding(CmdLessThan, RunCommand);
             CommandBinding CbQuestion = new CommandBinding(CmdQuestion, RunCommand);
+            CommandBinding Movve = new CommandBinding(move, RunCommand);
 
 
 
@@ -270,6 +301,7 @@ namespace TouchScreenBoard
 
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbShift);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbZ);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), Movve);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbX);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbC);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbV);
@@ -285,6 +317,22 @@ namespace TouchScreenBoard
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbSpaceBar);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbClear);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbClose);
+
+            //berk türkçe
+            CommandBinding CbGg = new CommandBinding(CmdGg, RunCommand);
+            CommandBinding CbUu = new CommandBinding(CmdUu, RunCommand);
+            CommandBinding CbSS = new CommandBinding(CmdSs, RunCommand);
+            CommandBinding CbIi = new CommandBinding(CmdIi, RunCommand);
+            CommandBinding CbOo = new CommandBinding(CmdOo, RunCommand);
+            CommandBinding CbCc = new CommandBinding(CmdCc, RunCommand);
+
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbGg);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbUu);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbSS);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbIi);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbOo);
+            CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbCc);
+            //berk
         }
         static void RunCommand(object sender, ExecutedRoutedEventArgs e)
         {
@@ -648,6 +696,10 @@ namespace TouchScreenBoard
                 AddKeyBoardINput('Z');
 
             }
+            else if (e.Command == move)
+            {
+                AddKeyBoardINput('Z');
+            }
             else if (e.Command == CmdX)
             {
                 AddKeyBoardINput('X');
@@ -730,6 +782,41 @@ namespace TouchScreenBoard
             {
                 OnLostFocus(_CurrentControl, null);
             }
+            else if (e.Command == CmdGg)    //berk türkçe başladı
+            {
+                AddKeyBoardINput('Ğ');
+            }
+            else if (e.Command == CmdUu)
+            {
+                AddKeyBoardINput('Ü');
+            }
+            else if (e.Command == CmdSs)
+            {
+                AddKeyBoardINput('Ş');
+            }
+            else if (e.Command == CmdIi)
+            {
+                AddKeyBoardINput('İ');
+            }
+            else if (e.Command == CmdOo)
+            {
+                AddKeyBoardINput('Ö');
+            }
+            else if (e.Command == CmdCc)    //türkçe karakter bitti
+            {
+                AddKeyBoardINput('Ç');
+            }
+        }
+        public ICommand CycleStartButtonBorder
+        {
+            get
+            {
+                return new RelayCommand(o =>
+                {
+
+                    AddKeyBoardINput('c');
+                }, o => true);
+            }
         }
         #endregion
         #region Main Functionality
@@ -765,38 +852,45 @@ namespace TouchScreenBoard
 
         private static void syncchild()
         {
-            if (_CurrentControl != null && _InstanceObject != null)
+            try
             {
+                if (_CurrentControl != null && _InstanceObject != null)
+                {
 
-                Point virtualpoint = new Point(0, _CurrentControl.ActualHeight + 3);
-                Point Actualpoint = _CurrentControl.PointToScreen(virtualpoint);
+                    Point virtualpoint = new Point(0, _CurrentControl.ActualHeight + 3);
+                    Point Actualpoint = _CurrentControl.PointToScreen(virtualpoint);
 
-                if (WidthTouchKeyboard + Actualpoint.X > SystemParameters.VirtualScreenWidth)
-                {
-                    double difference = WidthTouchKeyboard + Actualpoint.X - SystemParameters.VirtualScreenWidth;
-                    _InstanceObject.Left = Actualpoint.X - difference;
-                }
-                else if (!(Actualpoint.X > 1))
-                {
-                    _InstanceObject.Left = 1;
-                }
-                else
-                {
-                    _InstanceObject.Left = Actualpoint.X;
-                }
+                    if (WidthTouchKeyboard + Actualpoint.X > SystemParameters.VirtualScreenWidth)
+                    {
+                        double difference = WidthTouchKeyboard + Actualpoint.X - SystemParameters.VirtualScreenWidth;
+                        _InstanceObject.Left = Actualpoint.X - difference;
+                    }
+                    else if (!(Actualpoint.X > 1))
+                    {
+                        _InstanceObject.Left = 1;
+                    }
+                    else
+                    {
+                        _InstanceObject.Left = Actualpoint.X;
+                    }
 
-                if(HeightTouchKeyboard + Actualpoint.Y > SystemParameters.VirtualScreenHeight)
-                {
-                    _InstanceObject.Top = _CurrentControl.PointToScreen(new Point(0, 0)).Y - HeightTouchKeyboard - 3;
-                }
-                else
-                {
-                    _InstanceObject.Top = Actualpoint.Y;
-                }
+                    if (HeightTouchKeyboard + Actualpoint.Y > SystemParameters.VirtualScreenHeight)
+                    {
+                        _InstanceObject.Top = _CurrentControl.PointToScreen(new Point(0, 0)).Y - HeightTouchKeyboard - 3;
+                    }
+                    else
+                    {
+                        _InstanceObject.Top = Actualpoint.Y;
+                    }
 
-                _InstanceObject.Show();
+                    _InstanceObject.Show();
+                }
             }
-
+            catch (Exception)
+            {
+                _InstanceObject.Close();
+                //throw;
+            }
 
         }
 
@@ -840,7 +934,6 @@ namespace TouchScreenBoard
             host.BorderBrush = Brushes.Blue;
             host.BorderThickness = new Thickness(4);
 
-
             _CurrentControl = host;
 
             if (_InstanceObject == null)
@@ -858,7 +951,7 @@ namespace TouchScreenBoard
                     ct = (FrameworkElement)ct.Parent;
                 }
 
-                if(ct == null)
+                if (ct == null)
                 {
                     host.GotFocus += new RoutedEventHandler(TouchScreenKeyboard_Activated);
                     host.LostFocus += new RoutedEventHandler(TouchScreenKeyboard_Deactivated);
@@ -886,7 +979,7 @@ namespace TouchScreenBoard
         }
         static void TouchScreenKeyboard_Deactivated(object sender, RoutedEventArgs e)
         {
-            if(_InstanceObject != null)
+            if (_InstanceObject != null)
             {
                 _InstanceObject.Topmost = false;
             }
@@ -902,7 +995,7 @@ namespace TouchScreenBoard
 
         static void TouchScreenKeyboard_Activated(object sender, RoutedEventArgs e)
         {
-            if(_InstanceObject != null)
+            if (_InstanceObject != null)
             {
                 _InstanceObject.Topmost = true;
             }
@@ -913,10 +1006,11 @@ namespace TouchScreenBoard
         {
             syncchild();
         }
-
+        static bool moved = false;
         static void tb_LayoutUpdated(object sender, EventArgs e)
         {
-            syncchild();
+            if (!moved)
+                syncchild();
         }
 
 
@@ -939,6 +1033,68 @@ namespace TouchScreenBoard
 
         }
 
+        #endregion
+        #region Drag Window
+        public static readonly DependencyProperty EnableDragProperty = DependencyProperty.RegisterAttached(
+            "EnableDrag",
+            typeof(bool),
+            typeof(EnableDragHelper),
+            new PropertyMetadata(default(bool), OnLoaded));
+
+        private static void OnLoaded(DependencyObject dependencyObject, DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)
+        {
+            var uiElement = dependencyObject as UIElement;
+            if (uiElement == null || (dependencyPropertyChangedEventArgs.NewValue is bool) == false)
+            {
+                return;
+            }
+            if ((bool)dependencyPropertyChangedEventArgs.NewValue == true)
+            {
+                uiElement.MouseMove += UIElementOnMouseMove;
+            }
+            else
+            {
+                uiElement.MouseMove -= UIElementOnMouseMove;
+            }
+
+        }
+
+        private static void UIElementOnMouseMove(object sender, MouseEventArgs mouseEventArgs)
+        {
+            var uiElement = sender as UIElement;
+            if (uiElement != null)
+            {
+                if (mouseEventArgs.LeftButton == MouseButtonState.Pressed)
+                {
+                    DependencyObject parent = uiElement;
+                    int avoidInfiniteLoop = 0;
+                    // Search up the visual tree to find the first parent window.
+                    while ((parent is Window) == false)
+                    {
+                        parent = VisualTreeHelper.GetParent(parent);
+                        avoidInfiniteLoop++;
+                        if (avoidInfiniteLoop == 1000)
+                        {
+                            // Something is wrong - we could not find the parent window.
+                            return;
+                        }
+                    }
+                    var window = parent as Window;
+                    window.DragMove();
+                }
+            }
+        }
+
+        public static void SetEnableDrag(DependencyObject element, bool value)
+        {
+            moved = true;
+            element.SetValue(EnableDragProperty, value);
+        }
+
+        public static bool GetEnableDrag(DependencyObject element)
+        {
+            return (bool)element.GetValue(EnableDragProperty);
+        }
         #endregion
     }
 }

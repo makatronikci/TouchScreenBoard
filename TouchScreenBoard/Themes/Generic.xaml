@@ -8,8 +8,9 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Control}">
                     <Grid Margin="4 2">
-                        <Rectangle Name="r1" StrokeThickness="1" Stroke="Black" StrokeDashArray="2 2"/>
-                        <Border Name="border" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"  CornerRadius="2" BorderThickness="1" />
+                        <Rectangle Name="r1" StrokeThickness="1" Stroke="DarkGray" StrokeDashArray="2 2"/>
+                        <Border Name="border" Width="{TemplateBinding ActualWidth}" Height="{TemplateBinding ActualHeight}"  
+                                CornerRadius="2" BorderThickness="1" />
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>
@@ -27,17 +28,26 @@
         <Setter Property="FontSize" Value="15px"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
+        <Setter Property="Foreground" Value="White"/>
         <Setter Property="Background" >
             <Setter.Value>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
                     <GradientStop Color="#FFFFD190" Offset="0.2"/>
                     <GradientStop Color="DarkGray" Offset="0.85"/>
                     <GradientStop Color="#FFFFD190" Offset="1"/>
+                </LinearGradientBrush>-->
+                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                    <!--<GradientStop Color="#1E91A5" Offset="0.5"/>
+                    <GradientStop Color="#73C269" Offset="1.0"/>-->
+                    <GradientStop Color="#928C8C" Offset="0.5"/>
+                    <GradientStop Color="#383E42" Offset="1.0"/>
                 </LinearGradientBrush>
             </Setter.Value>
         </Setter>
         <Setter Property="Template">
+
             <Setter.Value>
+
                 <ControlTemplate TargetType="Button">
                     <Border Name="border" 
 				BorderThickness="3"
@@ -57,16 +67,21 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="border" Property="BorderBrush" Value="#FF4788c8" />
-                            <Setter Property="Foreground" Value="#FF4788c8" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="white" />
+                            <Setter Property="Foreground" Value="White" />
                         </Trigger>
                         <Trigger Property="IsPressed" Value="True">
                             <Setter Property="Background" >
                                 <Setter.Value>
-                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                                    <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
                                         <GradientStop Color="#FFFFD190" Offset="0.35"/>
                                         <GradientStop Color="Orange" Offset="0.95"/>
                                         <GradientStop Color="#FFFFD190" Offset="1"/>
+                                    </LinearGradientBrush>-->
+                                    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                                        <!--<GradientStop Color="#1E91A5" Offset="0.5"/>
+                                        <GradientStop Color="#73C269" Offset="1.0"/>-->
+                                        <GradientStop Color="Gray" Offset="0.5"/>
                                     </LinearGradientBrush>
                                 </Setter.Value>
                             </Setter>
@@ -78,14 +93,14 @@
                             </Setter>
                         </Trigger>
                         <Trigger Property="IsDefaulted" Value="True">
-                            <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
                         </Trigger>
                         <Trigger Property="IsFocused" Value="True">
-                            <Setter TargetName="border" Property="BorderBrush" Value="#FF282828" />
+                            <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="border" Property="Opacity" Value="0.7" />
-                            <Setter Property="Foreground" Value="Gray" />
+                            <Setter Property="Foreground" Value="White" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -93,12 +108,117 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <Style x:Key="InformButton2" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="15px"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource MyFocusVisual}" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" >
+            <Setter.Value>
+                <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                    <GradientStop Color="#FFFFD190" Offset="0.2"/>
+                    <GradientStop Color="DarkGray" Offset="0.85"/>
+                    <GradientStop Color="#FFFFD190" Offset="1"/>
+                </LinearGradientBrush>-->
+                <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                    <!--<GradientStop Color="#1E91A5" Offset="0.5"/>
+                    <GradientStop Color="#73C269" Offset="1.0"/>-->
+                    <GradientStop Color="#928C8C" Offset="0.5"/>
+                    <GradientStop Color="#383E42" Offset="1.0"/>
+                </LinearGradientBrush>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Template">
 
+            <Setter.Value>
+
+                <ControlTemplate TargetType="Button">
+                    <Border Name="border" 
+				BorderThickness="3"
+				Padding="4,2" 
+				BorderBrush="DarkGray" 
+				CornerRadius="8" 
+				Background="{TemplateBinding Background}">
+                        <Grid >
+                            <ContentPresenter HorizontalAlignment="Left"  
+	                           VerticalAlignment="Center"  Name="contentShadow" 
+					Style="{StaticResource ShadowStyle}">
+
+                            </ContentPresenter>
+                            <ContentPresenter HorizontalAlignment="Left"  
+                            VerticalAlignment="Center" Name="content"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation To="300" Duration="0:0:1.5" 
+                AccelerationRatio="0.10" DecelerationRatio="0.25" 
+                Storyboard.TargetProperty="(Canvas.Width)" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Duration="0:0:1.5" 
+                AccelerationRatio="0.10" DecelerationRatio="0.25" 
+                Storyboard.TargetProperty="(Canvas.Width)" />
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger>
+
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="white" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" >
+                                <Setter.Value>
+                                    <!--<LinearGradientBrush StartPoint="0,0" EndPoint="0,1" >
+                                        <GradientStop Color="#FFFFD190" Offset="0.35"/>
+                                        <GradientStop Color="Orange" Offset="0.95"/>
+                                        <GradientStop Color="#FFFFD190" Offset="1"/>
+                                    </LinearGradientBrush>-->
+                                    <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+                                        <!--<GradientStop Color="#1E91A5" Offset="0.5"/>
+                                        <GradientStop Color="#73C269" Offset="1.0"/>-->
+                                        <GradientStop Color="Gray" Offset="0.5"/>
+                                    </LinearGradientBrush>
+                                </Setter.Value>
+                            </Setter>
+
+                            <Setter TargetName="content" Property="RenderTransform" >
+                                <Setter.Value>
+                                    <TranslateTransform Y="1.0" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsDefaulted" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="border" Property="BorderBrush" Value="DarkGray" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Opacity" Value="0.7" />
+                            <Setter Property="Foreground" Value="White" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
     <Style TargetType="{x:Type local:TouchScreenKeyboard}">
-        <Setter Property="Background" Value="WhiteSmoke"/>
-        <Setter Property="Width" Value="820"/>
-        <Setter Property="Height" Value="290"/>
-        <Setter Property="MaxHeight" Value="320" />
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="Width" Value="900"/>
+        <Setter Property="Height" Value="350"/>
+        <Setter Property="MaxHeight" Value="370" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TouchScreenKeyboard}">
@@ -107,13 +227,19 @@
                             CornerRadius="10"
                             BorderThickness="{TemplateBinding BorderThickness}"
                             Focusable="False"
-                            Height="290">
-                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10">
-                            <Border BorderBrush="Black" BorderThickness="5" CornerRadius="10">
+                            Height="340">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="10">
+                            <Border BorderBrush="DarkGray" BorderThickness="5" CornerRadius="10">
                                 <Border BorderBrush="White" BorderThickness="2" CornerRadius="10">
 
 
                                     <StackPanel Orientation="Vertical" >
+
+                                        <StackPanel Background="Transparent">
+                                            <Border Height="50" CornerRadius="10" local:TouchScreenKeyboard.EnableDrag="True">
+                                                <TextBlock Text=""/>
+                                            </Border>
+                                        </StackPanel>
 
                                         <StackPanel Orientation="Horizontal" >
 
@@ -205,6 +331,19 @@
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >=</TextBlock>
                                                 </StackPanel>
                                             </Button>
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdOpenCrulyBrace"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >{</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >[</TextBlock>
+                                                </StackPanel>
+                                            </Button>
+
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdEndCrultBrace"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >}</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >]</TextBlock>
+                                                </StackPanel>
+                                            </Button>
 
                                             <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdBackspace"   VerticalContentAlignment="Center" HorizontalContentAlignment="Center"  Width="105" Height="50">
                                                 Backspace
@@ -285,20 +424,30 @@
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
                                                 </StackPanel>
                                             </Button>
-
-
-
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdOpenCrulyBrace"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                            <!--ğü-->
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdGg"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >{</TextBlock>
-                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >[</TextBlock>
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Ğ</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
                                                 </StackPanel>
                                             </Button>
-
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdEndCrultBrace"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdUu"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >}</TextBlock>
-                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >]</TextBlock>
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Ü</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <!--ğü-->
+                                            <Button Style="{StaticResource InformButton}" VerticalContentAlignment="Top" Command="local:TouchScreenKeyboard.CmdDoubleInvertedComma"   HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >"</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >'</TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdQuestion" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >?</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >/</TextBlock>
                                                 </StackPanel>
                                             </Button>
 
@@ -381,9 +530,20 @@
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
                                                 </StackPanel>
                                             </Button>
-
-
-
+                                            <!--şi-->
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdSs"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Ş</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdIi"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >İ</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <!--şi-->
                                             <Button Style="{StaticResource InformButton}" VerticalContentAlignment="Top" Command="local:TouchScreenKeyboard.CmdColon"   HorizontalContentAlignment="Left"  Width="50" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                                     <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >:</TextBlock>
@@ -391,14 +551,9 @@
                                                 </StackPanel>
                                             </Button>
 
-                                            <Button Style="{StaticResource InformButton}" VerticalContentAlignment="Top" Command="local:TouchScreenKeyboard.CmdDoubleInvertedComma"   HorizontalContentAlignment="Left"  Width="50" Height="50">
-                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >"</TextBlock>
-                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >'</TextBlock>
-                                                </StackPanel>
-                                            </Button>
 
-                                            <Button Style="{StaticResource InformButton}" VerticalContentAlignment="Top" Command="local:TouchScreenKeyboard.CmdEnter"  HorizontalContentAlignment="Left"  Width="106.5" Height="50">
+
+                                            <Button Style="{StaticResource InformButton}" VerticalContentAlignment="Top" Command="local:TouchScreenKeyboard.CmdEnter"  HorizontalContentAlignment="Left"  Width="160.5" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                                     <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Enter</TextBlock>
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
@@ -410,7 +565,7 @@
                                         </StackPanel>
                                         <StackPanel Orientation="Horizontal" >
 
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdShift"  VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="131.5" Height="50">
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdShift"  VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="156" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                                     <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Shift</TextBlock>
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
@@ -463,6 +618,20 @@
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
                                                 </StackPanel>
                                             </Button>
+                                            <!--öç-->
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdOo"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Ö</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdCc"   VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
+                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
+                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Ç</TextBlock>
+                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
+                                                </StackPanel>
+                                            </Button>
+                                            <!--öç-->
 
                                             <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdLessThan"  VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
@@ -480,16 +649,9 @@
 
 
 
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdQuestion" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="50" Height="50">
-                                                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
-                                                    <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >?</TextBlock>
-                                                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   >/</TextBlock>
-                                                </StackPanel>
-                                            </Button>
 
 
-
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdShift"  VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="131.5" Height="50">
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdShift"  VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="161.5" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                                     <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   >Shift</TextBlock>
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
@@ -505,7 +667,7 @@
                                                 Clear
                                             </Button>
 
-                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdSpaceBar" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="395" Height="50">
+                                            <Button Style="{StaticResource InformButton}" Command="local:TouchScreenKeyboard.CmdSpaceBar" VerticalContentAlignment="Top" HorizontalContentAlignment="Left"  Width="505" Height="50">
                                                 <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" >
                                                     <TextBlock    HorizontalAlignment="Left" VerticalAlignment="Top"   ></TextBlock>
                                                     <TextBlock HorizontalAlignment="Left" VerticalAlignment="Bottom"   ></TextBlock>
@@ -532,17 +694,19 @@
 
     </Style>
     <Style TargetType="{x:Type local:TouchScreenKeypad}">
-        <Setter Property="Background" Value="WhiteSmoke"/>
+        <Setter Property="Background" Value="LightGray"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type local:TouchScreenKeypad}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
-                            Focusable="False">
-                        <Border BorderBrush="Black" BorderThickness="5" CornerRadius="10">
+                            Focusable="False"
+                            CornerRadius="10">
+                        <Border BorderBrush="DarkGray" BorderThickness="5" CornerRadius="10">
                             <Grid>
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
@@ -554,72 +718,92 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
+                                <StackPanel Grid.ColumnSpan="4"  Background="Transparent">
+                                    <Border Height="50" CornerRadius="10" local:TouchScreenKeypad.EnableDrag="True">
+                                        <TextBlock Text="                                                                  "/>
+                                    </Border>
+                                </StackPanel>
+
                                 <Button Content="7" Command="local:TouchScreenKeypad.Cmd7"
                                         Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left"
+                                        Grid.Row="1">
                                 </Button>
                                 <Button Content="8" Command="local:TouchScreenKeypad.Cmd8"
                                         Grid.Column="1"
                                         Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left"
+                                        Grid.Row="1">
                                 </Button>
                                 <Button Content="9" Command="local:TouchScreenKeypad.Cmd9"
                                         Grid.Column="2"
                                         Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left"
+                                        Grid.Row="1">
                                 </Button>
                                 <Button Content="Close" Command="local:TouchScreenKeypad.CmdClose"
                                         Grid.Column="3"
                                         Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left"
+                                        Grid.Row="1">
                                 </Button>
                                 <Button Content="4" Command="local:TouchScreenKeypad.Cmd4"
-                                        Grid.Row="1"
-                                        Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
-                                </Button>
-                                <Button Content="5" Command="local:TouchScreenKeypad.Cmd5"
-                                        Grid.Row="1" Grid.Column="1"
-                                        Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
-                                </Button>
-                                <Button Content="6" Command="local:TouchScreenKeypad.Cmd6"
-                                        Grid.Row="1" Grid.Column="2"
-                                        Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
-                                </Button>
-                                <Button Content="Clear" Command="local:TouchScreenKeypad.CmdClear"
-                                        Grid.Row="1" Grid.Column="3"
-                                        Style="{StaticResource InformButton}"
-                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
-                                </Button>
-                                <Button Content="1" Command="local:TouchScreenKeypad.Cmd1"
                                         Grid.Row="2"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
                                 </Button>
-                                <Button Content="2" Command="local:TouchScreenKeypad.Cmd2"
+                                <Button Content="5" Command="local:TouchScreenKeypad.Cmd5"
                                         Grid.Row="2" Grid.Column="1"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
                                 </Button>
-                                <Button Content="3" Command="local:TouchScreenKeypad.Cmd3"
+                                <Button Content="6" Command="local:TouchScreenKeypad.Cmd6"
                                         Grid.Row="2" Grid.Column="2"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
                                 </Button>
+                                <Button Content="Clear" Command="local:TouchScreenKeypad.CmdClear"
+                                        Grid.Row="2" Grid.Column="3"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                </Button>
+                                <Button Content="1" Command="local:TouchScreenKeypad.Cmd1"
+                                        Grid.Row="3"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                </Button>
+                                <Button Content="2" Command="local:TouchScreenKeypad.Cmd2"
+                                        Grid.Row="3" Grid.Column="1"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                </Button>
+                                <Button Content="3" Command="local:TouchScreenKeypad.Cmd3"
+                                        Grid.Row="3" Grid.Column="2"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                </Button>
+                                <Button Content="Back" Command="local:TouchScreenKeypad.CmdBackspace"
+                                        Grid.Row="3" Grid.Column="3"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Center" HorizontalContentAlignment="Left">
+                                </Button>
                                 <Button Content="Enter" Command="local:TouchScreenKeypad.CmdEnter"
-                                        Grid.Row="2" Grid.Column="3" Grid.RowSpan="2"
+                                        Grid.Row="4" Grid.Column="3"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Center" HorizontalContentAlignment="Left">
                                 </Button>
                                 <Button Content="0" Command="local:TouchScreenKeypad.Cmd0"
-                                        Grid.Row="3" Grid.ColumnSpan="2"
+                                        Grid.Row="4" Grid.Column="0"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
                                 </Button>
                                 <Button Content="." Command="local:TouchScreenKeypad.CmdDot"
-                                        Grid.Row="3" Grid.Column="2"
+                                        Grid.Row="4" Grid.Column="2"
+                                        Style="{StaticResource InformButton}"
+                                        VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
+                                </Button>
+                                <Button Content="+/-" Command="local:TouchScreenKeypad.CmdScroll"
+                                        Grid.Row="4" Grid.Column="1"
                                         Style="{StaticResource InformButton}"
                                         VerticalContentAlignment="Top" HorizontalContentAlignment="Left">
                                 </Button>
