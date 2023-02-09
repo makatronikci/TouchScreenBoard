@@ -149,61 +149,75 @@ namespace TouchScreenBoard
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), CbClear);
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeypad), CbClose);
         }
+        private static bool IsRunning;
         static void RunCommand(object sender, ExecutedRoutedEventArgs e)
         {
+            string result = "";
             if (e.Command == Cmd1)
             {
-                TouchScreenKeypad.TouchScreenText += "1";
+                result = "1";
             }
             else if (e.Command == Cmd2)
             {
-                TouchScreenKeypad.TouchScreenText += "2";
+                result = "2";
 
             }
             else if (e.Command == Cmd3)
             {
-                TouchScreenKeypad.TouchScreenText += "3";
+                result = "3";
 
             }
             else if (e.Command == Cmd4)
             {
-                TouchScreenKeypad.TouchScreenText += "4";
+                result = "4";
             }
             else if (e.Command == Cmd5)
             {
-                TouchScreenKeypad.TouchScreenText += "5";
+                result = "5";
             }
             else if (e.Command == Cmd6)
             {
-                TouchScreenKeypad.TouchScreenText += "6";
+                result = "6";
             }
             else if (e.Command == Cmd7)
             {
-                TouchScreenKeypad.TouchScreenText += "7";
+                result = "7";
             }
             else if (e.Command == Cmd8)
             {
-                TouchScreenKeypad.TouchScreenText += "8";
+                result = "8";
             }
             else if (e.Command == Cmd9)
             {
-                TouchScreenKeypad.TouchScreenText += "9";
+                result = "9";
             }
             else if (e.Command == Cmd0)
             {
-                TouchScreenKeypad.TouchScreenText += "0";
+                result = "0";
             }
             else if (e.Command == CmdDot)
             {
-                TouchScreenText += ".";
+                result = ".";
             }
             else if (e.Command == CmdBackspace)
             {
-                if (!string.IsNullOrEmpty(TouchScreenKeypad.TouchScreenText))
+                IsRunning = true;
+                if (SelectionStart > 0)
                 {
-                    TouchScreenKeypad.TouchScreenText = TouchScreenKeypad.TouchScreenText.Substring(0, TouchScreenKeypad.TouchScreenText.Length - 1);
+                    if (TouchScreenKeypad.SelectedText.Length > 0)
+                    {
+                        TouchScreenKeypad.TouchScreenText =
+                            TouchScreenKeypad.TouchScreenText.Remove(SelectionStart, SelectedText.Length);
+                        SelectedText = "";
+                    }
+                    else
+                    {
+                        TouchScreenKeypad.TouchScreenText = TouchScreenKeypad.TouchScreenText.Remove(SelectionStart - 1, 1);
+                        --SelectionStart;
+                        if (SelectionStart < 0) SelectionStart = 0;
+                    }
                 }
-
+                IsRunning = false;
             }
             else if (e.Command == CmdEnter)
             {
@@ -218,11 +232,14 @@ namespace TouchScreenBoard
                 }
                 _CurrentControl.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 //System.Windows.Input.Keyboard.ClearFocus();
-
+                SelectionStart = TouchScreenKeypad.TouchScreenText.Length;
+                SelectedText = "";
             }
             else if (e.Command == CmdClear)//Last row
             {
                 TouchScreenKeypad.TouchScreenText = "";
+                SelectionStart = 0;
+                SelectedText = "";
             }
             else if (e.Command == CmdClose)
             {
@@ -253,6 +270,41 @@ namespace TouchScreenBoard
 
 
             }
+            AddResult(result);
+        }
+        private static void AddResult(string result)
+        {
+            IsRunning = true;
+            if (_CurrentControl != null)
+            {
+                if (_CurrentControl is TextBox)
+                {
+                    TextBox tb = (TextBox)_CurrentControl;
+                    if (SelectedText == null)
+                    {
+                        SelectedText = "";
+                        SelectionStart = tb.Text.Length;
+                    }
+                    if (TouchScreenKeypad.SelectedText.Length > 0)
+                    {
+                        TouchScreenKeypad.TouchScreenText =
+                            TouchScreenKeypad.TouchScreenText.Remove(tb.SelectionStart, tb.SelectedText.Length);
+                    }
+                    if (SelectionStart > TouchScreenKeypad.TouchScreenText.Length)
+                        SelectionStart = TouchScreenKeypad.TouchScreenText.Length;
+                    TouchScreenKeypad.TouchScreenText =
+                        TouchScreenKeypad.TouchScreenText.Insert(SelectionStart, result);
+                    if (result != "") ++SelectionStart;
+                }
+                else if (_CurrentControl is PasswordBox)
+                {
+                    PasswordBox tb = (PasswordBox)_CurrentControl;
+                    TouchScreenKeypad.TouchScreenText =
+                        TouchScreenKeypad.TouchScreenText.Insert(SelectionStart, result);
+                    if (result != "") ++SelectionStart;
+                }
+            }
+            IsRunning = false;
         }
         #endregion
         #region Main Functionality
@@ -329,10 +381,21 @@ namespace TouchScreenBoard
                 host.GotFocus += new RoutedEventHandler(OnGotFocus);
                 host.LostFocus += new RoutedEventHandler(OnLostFocus);
             }
-
+            if (host is TextBox)
+            {
+                ((TextBox)host).SelectionChanged += TouchScreenKeypad_SelectionChanged;
+            }
         }
-
-
+        static int SelectionStart;
+        static string SelectedText;
+        private static void TouchScreenKeypad_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!IsRunning)
+            {
+                SelectionStart = ((TextBox)sender).SelectionStart;
+                SelectedText = ((TextBox)sender).SelectedText;
+            }
+        }
 
         static void OnGotFocus(object sender, RoutedEventArgs e)
         {

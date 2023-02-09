@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Collections.Generic;
 using System.Linq;
+using System.ComponentModel.Design;
 
 namespace TouchScreenBoard
 {
@@ -334,20 +335,22 @@ namespace TouchScreenBoard
             CommandManager.RegisterClassCommandBinding(typeof(TouchScreenKeyboard), CbCc);
             //berk
         }
+        private static bool IsRunning = false;
         static void RunCommand(object sender, ExecutedRoutedEventArgs e)
         {
-
+            IsRunning = true;
+            string result = "";
             if (e.Command == CmdTlide)  //First Row
             {
 
 
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "`";
+                    result = "`";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "~";
+                    result = "~";
                     ShiftFlag = false;
                 }
             }
@@ -355,11 +358,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "1";
+                    result = "1";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "!";
+                    result = "!";
                     ShiftFlag = false;
                 }
 
@@ -368,11 +371,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "2";
+                    result = "2";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "@";
+                    result = "@";
                     ShiftFlag = false;
                 }
 
@@ -381,11 +384,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "3";
+                    result = "3";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "#";
+                    result = "#";
                     ShiftFlag = false;
                 }
 
@@ -394,11 +397,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "4";
+                    result = "4";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "$";
+                    result = "$";
                     ShiftFlag = false;
                 }
 
@@ -407,11 +410,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "5";
+                    result = "5";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "%";
+                    result = "%";
                     ShiftFlag = false;
                 }
 
@@ -420,11 +423,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "6";
+                    result = "6";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "^";
+                    result = "^";
                     ShiftFlag = false;
                 }
 
@@ -433,11 +436,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "7";
+                    result = "7";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "&";
+                    result = "&";
                     ShiftFlag = false;
                 }
 
@@ -446,11 +449,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "8";
+                    result = "8";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "*";
+                    result = "*";
                     ShiftFlag = false;
                 }
 
@@ -459,11 +462,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "9";
+                    result = "9";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "(";
+                    result = "(";
                     ShiftFlag = false;
                 }
 
@@ -472,11 +475,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "0";
+                    result = "0";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += ")";
+                    result = ")";
                     ShiftFlag = false;
                 }
 
@@ -485,11 +488,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "-";
+                    result = "-";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "_";
+                    result = "_";
                     ShiftFlag = false;
                 }
 
@@ -498,26 +501,38 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "=";
+                    result = "=";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "+";
+                    result = "+";
                     ShiftFlag = false;
                 }
 
             }
             else if (e.Command == CmdBackspace)
             {
-                if (!string.IsNullOrEmpty(TouchScreenKeyboard.TouchScreenText))
+                IsRunning = true;
+                if (SelectionStart > 0)
                 {
-                    TouchScreenKeyboard.TouchScreenText = TouchScreenKeyboard.TouchScreenText.Substring(0, TouchScreenKeyboard.TouchScreenText.Length - 1);
+                    if (TouchScreenKeyboard.SelectedText.Length > 0)
+                    {
+                        TouchScreenKeyboard.TouchScreenText =
+                            TouchScreenKeyboard.TouchScreenText.Remove(SelectionStart, SelectedText.Length);
+                        SelectedText = "";
+                    }
+                    else
+                    {
+                        TouchScreenKeyboard.TouchScreenText = TouchScreenKeyboard.TouchScreenText.Remove(SelectionStart - 1, 1);
+                        --SelectionStart;
+                        if (SelectionStart < 0) SelectionStart = 0;
+                    }
                 }
-
+                IsRunning = false;
             }
             else if (e.Command == CmdTab)  //Second Row
             {
-                TouchScreenKeyboard.TouchScreenText += "     ";
+                result = "     ";
             }
             else if (e.Command == CmdQ)
             {
@@ -564,11 +579,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "[";
+                    result = "[";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "{";
+                    result = "{";
                     ShiftFlag = false;
                 }
             }
@@ -576,11 +591,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "]";
+                    result = "]";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "}";
+                    result = "}";
                     ShiftFlag = false;
                 }
             }
@@ -588,11 +603,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += @"\";
+                    result = @"\";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "|";
+                    result = "|";
                     ShiftFlag = false;
                 }
             }
@@ -650,11 +665,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += ";";
+                    result = ";";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += ":";
+                    result = ":";
                     ShiftFlag = false;
                 }
 
@@ -663,11 +678,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "'";
+                    result = "'";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += Char.ConvertFromUtf32(34);
+                    result = Char.ConvertFromUtf32(34);
                     ShiftFlag = false;
                 }
 
@@ -682,7 +697,8 @@ namespace TouchScreenBoard
                 }
                 _CurrentControl.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
                 //System.Windows.Input.Keyboard.ClearFocus();
-
+                SelectionStart = TouchScreenKeyboard.TouchScreenText.Length;
+                SelectedText = "";
             }
             else if (e.Command == CmdShift) //Fourth Row
             {
@@ -734,11 +750,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += ",";
+                    result = ",";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "<";
+                    result = "<";
                     ShiftFlag = false;
                 }
 
@@ -747,11 +763,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += ".";
+                    result = ".";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += ">";
+                    result = ">";
                     ShiftFlag = false;
                 }
 
@@ -760,11 +776,11 @@ namespace TouchScreenBoard
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += "/";
+                    result = "/";
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += "?";
+                    result = "?";
                     ShiftFlag = false;
                 }
 
@@ -772,11 +788,13 @@ namespace TouchScreenBoard
             else if (e.Command == CmdSpaceBar)//Last row
             {
 
-                TouchScreenKeyboard.TouchScreenText += " ";
+                result = " ";
             }
             else if (e.Command == CmdClear)//Last row
             {
                 TouchScreenKeyboard.TouchScreenText = "";
+                SelectionStart = 0;
+                SelectedText = "";
             }
             else if (e.Command == CmdClose)
             {
@@ -806,6 +824,8 @@ namespace TouchScreenBoard
             {
                 AddKeyBoardINput('Ç');
             }
+            AddResult(result);
+            IsRunning = false;
         }
         public ICommand CycleStartButtonBorder
         {
@@ -822,33 +842,70 @@ namespace TouchScreenBoard
         #region Main Functionality
         private static void AddKeyBoardINput(char input)
         {
+            string result = "";
             if (CapsLockFlag)
             {
                 if (ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += char.ToLower(input).ToString();
+                    result = char.ToLower(input).ToString();
                     ShiftFlag = false;
 
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += char.ToUpper(input).ToString();
+                    result = char.ToUpper(input).ToString();
                 }
             }
             else
             {
                 if (!ShiftFlag)
                 {
-                    TouchScreenKeyboard.TouchScreenText += char.ToLower(input).ToString();
+                    result = char.ToLower(input).ToString();
                 }
                 else
                 {
-                    TouchScreenKeyboard.TouchScreenText += char.ToUpper(input).ToString();
+                    result = char.ToUpper(input).ToString();
                     ShiftFlag = false;
                 }
             }
+            AddResult(result);
         }
-
+        private static void AddResult(string result)
+        {
+            IsRunning = true;
+            if (_CurrentControl != null)
+            {
+                if (_CurrentControl is TextBox)
+                {
+                    TextBox tb = (TextBox)_CurrentControl;
+                    if (SelectedText == null)
+                    {
+                        SelectedText = "";
+                        SelectionStart = tb.Text.Length;
+                    }
+                    if (TouchScreenKeyboard.SelectedText.Length > 0)
+                    {
+                        TouchScreenKeyboard.TouchScreenText =
+                            TouchScreenKeyboard.TouchScreenText.Remove(tb.SelectionStart, tb.SelectedText.Length);
+                    }
+                    if (SelectionStart > TouchScreenKeyboard.TouchScreenText.Length) 
+                        SelectionStart = TouchScreenKeyboard.TouchScreenText.Length;
+                    TouchScreenKeyboard.TouchScreenText =
+                        TouchScreenKeyboard.TouchScreenText.Insert(SelectionStart, result);
+                    if(result!="")++SelectionStart;
+                }
+                else if(_CurrentControl is PasswordBox)
+                {
+                    PasswordBox tb = (PasswordBox)_CurrentControl;
+                    if (TouchScreenKeyboard.TouchScreenText == "") SelectionStart = 0;
+                    TouchScreenKeyboard.TouchScreenText =
+                        TouchScreenKeyboard.TouchScreenText.Insert(SelectionStart, result);
+                    if (result != "") ++SelectionStart;
+                }
+            }
+            IsRunning = false;
+        }
+        private static int ci;
 
         private static void syncchild()
         {
@@ -916,11 +973,23 @@ namespace TouchScreenBoard
             {
                 host.GotFocus += new RoutedEventHandler(OnGotFocus);
                 host.LostFocus += new RoutedEventHandler(OnLostFocus);
+                if(host is TextBox)
+                {
+                    ((TextBox)host).SelectionChanged += TouchScreenKeyboard_SelectionChanged;
+                }
             }
 
         }
-
-
+        static int SelectionStart;
+        static string SelectedText;
+        private static void TouchScreenKeyboard_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!IsRunning)
+            {
+                SelectionStart = ((TextBox)sender).SelectionStart;
+                SelectedText = ((TextBox)sender).SelectedText;
+            }
+        }
 
         static void OnGotFocus(object sender, RoutedEventArgs e)
         {
@@ -1022,7 +1091,6 @@ namespace TouchScreenBoard
             //host.Background = _PreviousTextBoxBackgroundBrush;
             host.BorderBrush = _PreviousTextBoxBorderBrush;
             host.BorderThickness = _PreviousTextBoxBorderThickness;
-
             if (_InstanceObject != null)
             {
                 _InstanceObject.Close();
