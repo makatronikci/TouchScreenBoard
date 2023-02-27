@@ -225,7 +225,8 @@ namespace TouchScreenBoard
                 {
                     if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
                     {
-                        TouchScreenText = "0";
+                        if (_CurrentControl is TextBox)
+                            TouchScreenText = "0";
                     }
                     _InstanceObject.Close();
                     _InstanceObject = null;
@@ -245,7 +246,8 @@ namespace TouchScreenBoard
             {
                 if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
                 {
-                    TouchScreenText = "0";
+                    if (_CurrentControl is TextBox)
+                        TouchScreenText = "0";
                 }
                 OnLostFocus(_CurrentControl, null);
             }
@@ -343,14 +345,25 @@ namespace TouchScreenBoard
                     }
 
                     _InstanceObject.Show();
-                    var abc = (TextBox)_CurrentControl;
-                    if (abc.Text == "0")
+                    if(_CurrentControl is TextBox)
                     {
-                        abc.Text = "";
+                        var abc = (TextBox)_CurrentControl;
+                        if (abc.Text == "0")
+                        {
+                            abc.Text = "";
+                        }
+                    }
+                    else if (_CurrentControl is PasswordBox)
+                    {
+                        var abc = (PasswordBox)_CurrentControl;
+                        if (abc.Password == "0")
+                        {
+                            abc.Password = "";
+                        }
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _InstanceObject.Close();
                 //throw;
@@ -441,7 +454,10 @@ namespace TouchScreenBoard
 
                 host.LayoutUpdated += new EventHandler(tb_LayoutUpdated);
             }
-
+            if (_CurrentControl is TextBox)
+            {
+                ((TextBox)_CurrentControl).SelectAll();
+            }
 
 
         }
@@ -501,6 +517,7 @@ namespace TouchScreenBoard
             {
                 if (TouchScreenText == "" || TouchScreenText == null || TouchScreenText == string.Empty)
                 {
+                    if(_CurrentControl is TextBox)
                     TouchScreenText = "0";
                 }
 

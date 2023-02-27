@@ -1034,7 +1034,10 @@ namespace TouchScreenBoard
 
                 host.LayoutUpdated += new EventHandler(tb_LayoutUpdated);
             }
-
+            if(_CurrentControl is TextBox)
+            {
+                ((TextBox)_CurrentControl).SelectAll();
+            }
 
 
         }
