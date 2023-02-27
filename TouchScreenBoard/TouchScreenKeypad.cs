@@ -301,6 +301,8 @@ namespace TouchScreenBoard
                 else if (_CurrentControl is PasswordBox)
                 {
                     PasswordBox tb = (PasswordBox)_CurrentControl;
+                    if (SelectionStart > TouchScreenKeypad.TouchScreenText.Length)
+                        SelectionStart = TouchScreenKeypad.TouchScreenText.Length;
                     TouchScreenKeypad.TouchScreenText =
                         TouchScreenKeypad.TouchScreenText.Insert(SelectionStart, result);
                     if (result != "") ++SelectionStart;
